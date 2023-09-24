@@ -1,0 +1,47 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Viewer</title>
+    <link rel="stylesheet" href="D:/Programfiles/viewer.css">
+</head>
+<body>
+    <div id="pdf-viewer">
+        <canvas id="pdf-canvas"></canvas>
+    </div>
+    
+    <script src="D:/Programfiles/pdf.js"></script>
+    <script src="D:/Programfiles/viewer.js"></script>
+    
+
+    <script>
+        // 加载并渲染PDF
+        var pdfUrl = 'D:/oriPDFs/0720417246libraryIJESDF2009.pdf'; // 替换为实际的PDF文件路径
+
+        // 异步加载PDF文件
+        var loadingTask = pdfjsLib.getDocument(pdfUrl);
+
+        loadingTask.promise.then(function(pdf) {
+            // 获取第一页
+            return pdf.getPage(1);
+        }).then(function(page) {
+            var scale = 1.5;
+            var viewport = page.getViewport({ scale: scale });
+
+            // 获取canvas元素
+            var canvas = document.getElementById('pdf-canvas');
+            var context = canvas.getContext('2d');
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+
+            // 渲染PDF到canvas
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport
+            };
+            page.render(renderContext);
+        });
+    </script>
+</body>
+</html>
+
